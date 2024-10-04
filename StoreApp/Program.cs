@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using StoreApp.DisplayTools;
 using StoreApp.Stores;
 
 namespace StoreApp
@@ -9,37 +10,15 @@ namespace StoreApp
     {
         static void Main(string[] args)
         {
-            // Create instances of each store with TimeOnly for opening and closing times
-            Store elGiganten = new ElGiganten("ElGiganten", new TimeOnly(9, 0), new TimeOnly(21, 0));
-            Store ica = new Ica("Ica", new TimeOnly(8, 0), new TimeOnly(20, 0));
-            Store xxl = new XXL("XXL", new TimeOnly(10, 0), new TimeOnly(22, 0));
+            // Eftersom Main() är statisk, begränsar det din flexibilitet
+            // när du arbetar med objekt och tillstånd.
+            // Därför är det en bra idé att hålla Main() enkel och
+            // snabbt överlåta programflödet till instansbaserade
+            // klasser och metoder för bättre design, testbarhet och
+            // underhållbarhet.
 
-            // Add my stores to a list
-            var myStores = new List<Store>();   
-            myStores.Add(elGiganten);
-            myStores.Add(ica);
-            myStores.Add(xxl);
-
-            // Display products for each store
-            foreach (var store in myStores) 
-            {
-                DisplayStoreProducts(store);
-            }
-
-            Console.WriteLine("Press any key to exit");
-            Console.ReadLine();
-        }
-
-        static void DisplayStoreProducts(Store store)
-        {
-            Console.WriteLine($"Store: {store.Name}");
-            Console.WriteLine($"Opening Hours: {store.OpeningTime:HH:mm} - {store.ClosingTime:HH:mm}");
-            Console.WriteLine("Products:");
-            foreach (var product in store.GetProducts())
-            {
-                Console.WriteLine($"- {product.Name}: {product.Price} SEK");
-            }
-            Console.WriteLine();
+            var app = new App();
+            app.Run();
         }
     }
 }
