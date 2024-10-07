@@ -17,31 +17,34 @@ namespace StoreApp.DisplayTools
             while (running)
             {
                 Console.Clear();
-                Console.WriteLine("Välj en butik (använd upp/ned piltangenter och tryck Enter):\n");
+                WriteCentered("Välj en butik (använd upp/ned piltangenter och tryck Enter):\n");
 
                 // Visa butiker och markera vald butik
                 for (int i = 0; i < stores.Count; i++)
                 {
+                    string prefix = "  "; // Two mellanslag unselected items
+
                     if (i == selectedIndex)
                     {
-                        Console.BackgroundColor = ConsoleColor.Blue;
-                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        prefix = "> "; // ">" symbol för vald item
                     }
 
-                    Console.WriteLine(stores[i].Name);
+                    WriteCentered(prefix + stores[i].Name);
 
                     // Återställ färger efter att ha markerat vald butik
                     Console.ResetColor();
                 }
 
                 // Lägg till en rad för att avsluta programmet
+                string exitPrefix = "  ";
                 if (selectedIndex == stores.Count)
                 {
-                    Console.BackgroundColor = ConsoleColor.Blue;
-                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    exitPrefix = "> ";
                 }
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Exit");
+                WriteCentered(exitPrefix + "Exit");
                 Console.ResetColor();
 
                 
@@ -78,27 +81,39 @@ namespace StoreApp.DisplayTools
                     {
                         Console.Clear();
                         DisplayStoreProducts(stores[selectedIndex]);
-                        Console.WriteLine("Tryck på valfri tangent för att återgå till menyn...");
+                        WriteCentered("Tryck på valfri tangent för att återgå till menyn...");
                         Console.ReadKey(true);
                     }
                 }
             }
-            Console.WriteLine("Programmet avslutas. Tack för att du använde StoreApp!");
+            WriteCentered("Programmet avslutas. Tack för att du använde StoreApp!");
         }
 
         public static void DisplayStoreProducts(Store store)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Store: {store.Name}");
+            WriteCentered($"Store: {store.Name}");
             Console.ResetColor();
-            Console.WriteLine($"Opening Hours: {store.OpeningTime:HH:mm} - {store.ClosingTime:HH:mm}");
-            Console.WriteLine("Products:");
+            WriteCentered($"Opening Hours: {store.OpeningTime:HH:mm} - {store.ClosingTime:HH:mm}");
+            WriteCentered("Products:");
             foreach (var product in store.GetProducts())
             {
-                Console.WriteLine($"- {product.Name}: {product.Price} SEK");
+                WriteCentered($"- {product.Name}: {product.Price} SEK");
             }
             Console.WriteLine();
         }
 
+        public static void WriteCentered(string text)
+        {
+            int windowWidth = Console.WindowWidth;
+            int textLength = text.Length;
+            int leftPadding = (windowWidth - textLength) / 2;
+
+            // Ensure leftPadding is not negative
+            if (leftPadding < 0) leftPadding = 0;
+
+            string padding = new string(' ', leftPadding);
+            Console.WriteLine(padding + text);
+        }
     }
 }
